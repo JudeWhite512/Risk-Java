@@ -1,20 +1,16 @@
 package util;
 import java.awt.Color;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
-
 import participant.ExamplePlayer1;
 import participant.ExamplePlayer2;
-import participant.OldExamplePlayer;
+import participant.Genny;
 import participant.PlayerLogic;
 public class Main {
 
     public static void main(String[] args){
         System.out.println("test");
 
-        ExamplePlayer1 sl1 = new ExamplePlayer1();
+        Genny sl1 = new Genny();
         ExamplePlayer1 sl2 = new ExamplePlayer1();
         //ExamplePlayer1 sl3 = new ExamplePlayer1();
         //ExamplePlayer1 sl4 = new ExamplePlayer1();

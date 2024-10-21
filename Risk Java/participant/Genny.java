@@ -12,7 +12,6 @@ import util.*;
 
 public class Genny extends PlayerLogic {
     GameLogger GL;
-    int turn=30;
     boolean attack=true;
     public Genny(){
         super();
@@ -22,7 +21,6 @@ public class Genny extends PlayerLogic {
      * @return Method to tell player their turn is about to start. Intended to let player initialize variables and logic.
      */
     public void beginTurn(Snapshot s){
-        if(turn>1)turn--;
         attack=true;
     }
 
@@ -39,12 +37,16 @@ public class Genny extends PlayerLogic {
     public Set<DeployCommand> draftPhase(Snapshot s, int numTroopstoPlace){
         GL = GameLogger.getGameLogger();
         Set<DeployCommand> returnSet = new HashSet<DeployCommand>();
-        int provcnt;
         while(numTroopstoPlace > 0){
             for(Province p: s.getMyPlayer().getTerritory()){
                 if(numTroopstoPlace > 0 && isAdjacentToEnemy(s, p)){
                     Province destination = p;
-                    int placeXTroops = numTroopstoPlace%15;
+                    int placeXTroops;
+                    if(numTroopstoPlace%5!=0) {
+                        placeXTroops = numTroopstoPlace%5;
+                    } else{
+                        placeXTroops =numTroopstoPlace/5;
+                    }
                     DeployCommand command = new DeployCommand(placeXTroops, destination);
                     numTroopstoPlace-=placeXTroops;
                     returnSet.add(command);
@@ -64,7 +66,7 @@ public class Genny extends PlayerLogic {
         Province attackingProvince = null;
         Province defendingProvince = null;
         for(Province p: s.getMyPlayer().getTerritory()){
-            if(p.getNumSoldiers() > 200/turn){
+            if(p.getNumSoldiers() > 5){
                 for(Province adj: p.getAdjacent()){
                     if(adj.getOwner() != p.getOwner()){
                         attackingProvince = p;
@@ -109,7 +111,7 @@ public class Genny extends PlayerLogic {
     }
 
     public void attackPhaseResults(int[] battleResults){
-        if(battleResults[0]<battleResults[1])attack=false;
+        if(battleResults[0]<battleResults[1]-2)attack=false;
         return;
     }
 
@@ -118,7 +120,7 @@ public class Genny extends PlayerLogic {
      * @return //Asks player how many troops to move into conquered territory. Should return [int numTroops]
      */
     public int moveAfterConquer(Snapshot s, Province attackingProvince, Province defendingProvince){
-        int transferXTroops = attackingProvince.getNumSoldiers()%2;
+        int transferXTroops = attackingProvince.getNumSoldiers()-2;
         return(transferXTroops);
 
     }
